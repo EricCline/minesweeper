@@ -1,35 +1,38 @@
 using System;
 
-public class Tile
+namespace Minesweeper
 {
-    public int X, Y;
-    public bool IsMine;
-    public bool Flagged;
-    public bool Revealed;
-    public int AdjacentMines;
-
-    public Tile(int x, int y)
+    public class Tile
     {
-        X = x;
-        Y = y;
-        IsMine = false;
-        Flagged = false;
-        Revealed = false;
-        AdjacentMines = 0;
-    }
+        public int X, Y;
+        public bool IsMine;
+        public bool Flagged;
+        public bool Revealed;
+        public int AdjacentMines;
 
-    public bool Exploded
-    {
-        get { return IsMine && Revealed; }
-    }
+        public Tile(int x, int y)
+        {
+            X = x;
+            Y = y;
+            IsMine = false;
+            Flagged = false;
+            Revealed = false;
+            AdjacentMines = 0;
+        }
 
-    public void Print()
-    {
-        Console.WriteLine(
-            String.Format(
-                "X: {0} Y: {1}  IsMine: {2} Revealed: {3}",
-                X, Y, IsMine, Revealed
-            )
-        );
+        public bool Exploded
+        {
+            get { return IsMine && Revealed; }
+        }
+
+        public void Print()
+        {
+            Console.WriteLine(
+                String.Format(
+                    "X: {0} Y: {1}  IsMine: {2} Revealed: {3}",
+                    X, Y, IsMine, Revealed
+                )
+            );
+        }
     }
 }

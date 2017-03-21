@@ -2,7 +2,7 @@
   <Import Project="$(MSBuildExtensionsPath)/$(MSBuildToolsVersion)/Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)/$(MSBuildToolsVersion)/Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{5DAB441B-7EE4-4DA0-8D4C-F0A25150222B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -11,7 +11,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin/Release/</OutputPath>
@@ -40,11 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoardTests.cs" />
-    <Compile Include="GameTests.cs" />
+    <Compile Include="GameControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Minesweeper/Minesweeper.csproj">
-      <Project>{0165A1DA-EB9B-4A2E-AFF1-8B175C4EFE68}</Project>
+      <Project>{DAE27B1C-2951-48B1-8760-5EB4F4C05CD4}</Project>
       <Name>Minesweeper</Name>
     </ProjectReference>
   </ItemGroup>
