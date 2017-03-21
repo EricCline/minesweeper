@@ -4,5 +4,5 @@ install:
   - nuget restore
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - mdtool build -p:"Minesweeper" -t:Build "Minesweeper.sln"
+  - xbuild /p:Configuration=Debug Minesweeper.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Minesweeper.Tests/bin/Release/Minesweeper.Tests.dll
