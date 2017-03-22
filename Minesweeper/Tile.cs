@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 
 namespace Minesweeper
 {
@@ -33,6 +34,16 @@ namespace Minesweeper
                     X, Y, IsMine, Revealed
                 )
             );
+        }
+
+        public bool Contains(int mouse_x, int mouse_y)
+        {
+            Rectangle bounding_box = new Rectangle(
+                    X * SweeperGame.TileSize,
+                    Y * SweeperGame.TileSize,
+                    SweeperGame.TileSize, SweeperGame.TileSize
+            );
+            return bounding_box.Contains(mouse_x, mouse_y);
         }
     }
 }

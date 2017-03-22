@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="BoardTests.cs" />
     <Compile Include="GameControllerTests.cs" />
+    <Compile Include="TileTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Minesweeper/Minesweeper.csproj">

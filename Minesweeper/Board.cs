@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,6 +11,8 @@ namespace Minesweeper
 
         private int _size;
         private int _mines;
+
+        private Rectangle bounding_box;
 
         public Board(int size, int mines)
         {
@@ -25,6 +28,7 @@ namespace Minesweeper
             MakeTiles();
             PlaceMines();
             UpdateTileAdjacentMines();
+            bounding_box = new Rectangle(0, 0, _size * 20, _size * 20);
         }
 
         public void PrintTiles()
@@ -143,6 +147,24 @@ namespace Minesweeper
                 }
                 return false;
             }
+        }
+
+        public bool ClickWithinGame(int mouse_x, int mouse_y)
+        {
+            return bounding_box.Contains(mouse_x, mouse_y);
+        }
+
+
+        public Tile TileFromCoordinates(int mouse_x, int mouse_y)
+        {
+            foreach(Tile t in Tiles)
+            {
+                if (t.Contains(mouse_x, mouse_y))
+                {
+                    return t;
+                }
+            }
+            throw new Exception("Clicked outside game board!");
         }
 
         private int[] possibleIndices(int coordinate)

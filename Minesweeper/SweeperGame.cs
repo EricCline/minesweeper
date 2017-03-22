@@ -1,20 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
 namespace Minesweeper
 {
-	/// <summary>
-	/// This is the main type for your game.
-	/// </summary>
+
 	public class SweeperGame: Game
 	{
-		private Texture2D tile;
-		private Texture2D revealed_tile;
-		private Texture2D mine_tile;
-		private Texture2D exploded_tile;
+        public const int TileSize = 20;
+
+        private Texture2D all_tiles;
+
+        private GameController gc;
+
+        private const int tile = 9;
+        private const int mine_tile = 10;
+        private const int flag_tile = 11;
+        private const int win_mine_tile = 12;
+        private const int win_clicked_tile = 13;
+
+        private MouseState prev_mouse_state;
+
+        private Dictionary<int, Rectangle> sprite_rects;
 
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
@@ -25,65 +36,94 @@ namespace Minesweeper
 			Content.RootDirectory = "Content";
 		}
 
-		/// <summary>
-		/// Allows the game to perform any initialization it needs to before starting to run.
-		/// This is where it can query for any required services and load any non-graphic
-		/// related content.  Calling base.Initialize will enumerate through any components
-		/// and initialize them as well.
-		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
+            this.IsMouseVisible = true;
+            gc = new GameController(16, 40);
+
+            sprite_rects = new Dictionary<int, Rectangle>();
+            sprite_rects.Add(0, new Rectangle (60, 0, TileSize, TileSize));
+            sprite_rects.Add(1, new Rectangle (80, 0, TileSize, TileSize));
+            sprite_rects.Add(2, new Rectangle (100, 0, TileSize, TileSize));
+            sprite_rects.Add(3, new Rectangle (120, 0, TileSize, TileSize));
+            sprite_rects.Add(4, new Rectangle (140, 0, TileSize, TileSize));
+            sprite_rects.Add(5, new Rectangle (160, 0, TileSize, TileSize));
+            sprite_rects.Add(6, new Rectangle (180, 0, TileSize, TileSize));
+            sprite_rects.Add(7, new Rectangle (200, 0, TileSize, TileSize));
+            sprite_rects.Add(8, new Rectangle (220, 0, TileSize, TileSize));
+
+            sprite_rects.Add(tile, new Rectangle (0, 0, TileSize, TileSize));
+            sprite_rects.Add(mine_tile, new Rectangle (20, 0, TileSize, TileSize));
+            sprite_rects.Add(flag_tile, new Rectangle (40, 0, TileSize, TileSize));
+            sprite_rects.Add(win_mine_tile, new Rectangle (240, 0, TileSize, TileSize));
+            sprite_rects.Add(win_clicked_tile, new Rectangle (260, 0, TileSize, TileSize));
 
 			base.Initialize();
 		}
 
-		/// <summary>
-		/// LoadContent will be called once per game and is the place to load
-		/// all of your content.
-		/// </summary>
 		protected override void LoadContent()
 		{
-			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch(GraphicsDevice);
-			tile = Content.Load<Texture2D>("Tile");
-			revealed_tile = Content.Load<Texture2D>("RevealedTile");
-			mine_tile = Content.Load<Texture2D>("MineTile");
-			exploded_tile = Content.Load<Texture2D>("ExplodedTile");
-
-			//TODO: use this.Content to load your game content here 
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            all_tiles = Content.Load<Texture2D>("Mines");
 		}
 
-		/// <summary>
-		/// Allows the game to run logic such as updating the world,
-		/// checking for collisions, gathering input, and playing audio.
-		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			// For Mobile devices, this logic will close the Game when the Back button is pressed
-			// Exit() is obsolete on iOS
-#if !__IOS__ && !__TVOS__
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
-#endif
-
-			// TODO: Add your update logic here
+            MouseState mouse_state = Mouse.GetState();
+            KeyboardState keyboard_state = Keyboard.GetState();
+            if (!gc.GameBoard.IsClear && !gc.GameBoard.IsExploded)
+            {
+                if (mouse_state.LeftButton == ButtonState.Pressed && prev_mouse_state.LeftButton == ButtonState.Released)
+                {
+                    if (keyboard_state.IsKeyDown(Keys.LeftControl))
+                    {
+                        gc.Flag(mouse_state.X, mouse_state.Y);
+                    }
+                    else
+                    {
+                        gc.Click(mouse_state.X, mouse_state.Y);
+                    }
+                }
+            }
+            prev_mouse_state = mouse_state;
 
 			base.Update(gameTime);
 		}
 
-		/// <summary>
-		/// This is called when the game should draw itself.
-		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-
-			//TODO: Add your drawing code here
 			spriteBatch.Begin();
-			spriteBatch.Draw(exploded_tile, new Rectangle(0, 0, 20, 20), Color.White);
+
+            foreach(Tile t in gc.GameBoard.Tiles)
+            {
+                Rectangle draw_square = new Rectangle(0, 0, TileSize, TileSize);
+
+                int x_pos = t.X * TileSize;
+                int y_pos = t.Y * TileSize;
+
+                if (t.Exploded) { draw_square = sprite_rects[mine_tile]; }
+                else if (t.Flagged) { draw_square = sprite_rects[flag_tile]; }
+                else if (t.Revealed) { draw_square = sprite_rects[t.AdjacentMines]; }
+                else if (t.IsMine)
+                {
+                    if (gc.GameBoard.IsExploded)
+                    {
+                        draw_square = sprite_rects[mine_tile];
+                    }
+                    else if (gc.GameBoard.IsClear)
+                    {
+                        draw_square = sprite_rects[win_mine_tile];
+                    }
+                    else
+                    {
+                        draw_square = sprite_rects[tile];
+                    }
+                }
+                else if (!t.Revealed) { draw_square = sprite_rects[tile]; }
+                spriteBatch.Draw(all_tiles, new Rectangle(x_pos, y_pos, TileSize, TileSize), draw_square, Color.White);
+
+            }
 			spriteBatch.End();
 
 			base.Draw(gameTime);

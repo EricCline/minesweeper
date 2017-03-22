@@ -22,8 +22,18 @@ namespace Minesweeper.Tests
         public void ClickRevealsTile()
         {
             g = new GameController(2, 0);
-            g.Click(0, 0);
+            g.Click(10, 10);
             g.GameBoard.Tiles[0, 0].Revealed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void ClickRelocatesMineIfFirstClick()
+        {
+            g = new GameController(2, 0);
+            g.GameBoard.Tiles[1, 1].IsMine = true;
+            g.Click(20, 20);
+            g.GameBoard.Tiles[0, 0].IsMine.ShouldBeTrue();
+            g.GameBoard.Tiles[1, 1].IsMine.ShouldBeFalse();
         }
 
         [Test]
