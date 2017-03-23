@@ -81,5 +81,24 @@ namespace Minesweeper.Tests
             b.IsExploded.ShouldBeTrue();
         }
 
+        [Test]
+        public void ClickWithinGameReturnsTrueWhenClickWithinGame()
+        {
+            b.ClickWithinGame(30, 30).ShouldBeTrue();
+        }
+
+        [Test]
+        public void ClickWithinGameReturnsFalseWhenClickOutsideGame()
+        {
+            b.ClickWithinGame(60, 60).ShouldBeFalse();
+        }
+
+        [Test]
+        public void TileFromCoordinatesReturnsCorrectTile()
+        {
+            Tile t = b.TileFromCoordinates(50, 10);  // third tile in first row
+            t.X.ShouldEqual(2);
+            t.Y.ShouldEqual(0);
+        }
     }
 }

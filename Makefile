@@ -5,7 +5,7 @@ build Minesweeper/obj/Debug/Minesweeper.exe Minesweeper.Tests/obj/Debug/Mineswee
 	xbuild /nologo /v:q /property:GenerateFullPaths=true Minesweeper.sln
 
 run: Minesweeper/obj/Debug/Minesweeper.exe
-	mono Minesweeper/obj/Debug/Minesweeper.exe
+	open Minesweeper/bin/Debug/Minesweeper.app
 
 test: Minesweeper.Tests/obj/Debug/Minesweeper.Tests.dll 
 	nunit-console -nologo Minesweeper.Tests/Minesweeper.Tests.csproj
