@@ -50,7 +50,7 @@ namespace Minesweeper
             return Array.FindAll(Tiles.Cast<Tile>().ToArray(), t => t.IsMine);
         }
 
-        private void UpdateTileAdjacentMines()
+        public void UpdateTileAdjacentMines()
         {
             foreach(Tile tile in Tiles)
             {

@@ -45,7 +45,6 @@ namespace Minesweeper
                 Tile tile = GameBoard.TileFromCoordinates(mouse_x, mouse_y);
                 if (first_click && tile.IsMine)
                 {
-                    first_click = false;
                     tile.IsMine = false;
                     foreach(Tile t in GameBoard.Tiles)
                     {
@@ -55,20 +54,16 @@ namespace Minesweeper
                             break;
                         }
                     }
-
+                    GameBoard.UpdateTileAdjacentMines();
                 }
-                tile.Revealed = true;
-                if (GameBoard.IsExploded)
+                first_click = false;
+                if (!tile.Flagged)
                 {
-                    Console.WriteLine("You Ded!");
-                }
-                else if (GameBoard.IsClear)
-                {
-                    Console.WriteLine("You Win!");
-                }
-                else
-                {
-                    CheckForEmptyReveals(tile);
+                    tile.Revealed = true;
+                    if (!GameBoard.IsExploded && !GameBoard.IsClear)
+                    {
+                        CheckForEmptyReveals(tile);
+                    }
                 }
             }
         }
