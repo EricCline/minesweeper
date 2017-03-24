@@ -34,7 +34,10 @@ namespace Minesweeper
             if (GameBoard.ClickWithinGame(mouse_x, mouse_y))
             {
                 Tile tile = GameBoard.TileFromCoordinates(mouse_x, mouse_y);
-                tile.Flagged = !tile.Flagged;
+                if (!tile.Revealed)
+                {
+                  tile.Flagged = !tile.Flagged;
+                }
             }
         }
 

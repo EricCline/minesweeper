@@ -19,6 +19,15 @@ namespace Minesweeper.Tests
         }
 
         [Test]
+        public void FlagDoesNothingIfRevealed()
+        {
+            g = new GameController(2, 0);
+            g.GameBoard.Tiles[0, 0].Revealed = true;
+            g.Flag(0, 0);
+            g.GameBoard.Tiles[0, 0].Flagged.ShouldBeFalse();
+        }
+
+        [Test]
         public void ClickRevealsTile()
         {
             g = new GameController(2, 0);
