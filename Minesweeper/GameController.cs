@@ -48,7 +48,6 @@ namespace Minesweeper
                 Tile tile = GameBoard.TileFromCoordinates(mouse_x, mouse_y);
                 if (first_click && tile.IsMine)
                 {
-                    tile.IsMine = false;
                     foreach(Tile t in GameBoard.Tiles)
                     {
                         if (!t.IsMine)
@@ -57,6 +56,7 @@ namespace Minesweeper
                             break;
                         }
                     }
+                    tile.IsMine = false;
                     GameBoard.UpdateTileAdjacentMines();
                 }
                 first_click = false;

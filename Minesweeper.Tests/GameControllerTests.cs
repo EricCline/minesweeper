@@ -56,6 +56,16 @@ namespace Minesweeper.Tests
         }
 
         [Test]
+        public void ClickRelocatesFirstTileMineIfFirstClick()
+        {
+            g = new GameController(2, 0);
+            g.GameBoard.Tiles[0, 0].IsMine = true;
+            g.Click(10, 10);
+            g.GameBoard.Tiles[0, 0].IsMine.ShouldBeFalse();
+            g.GameBoard.Tiles[0, 1].IsMine.ShouldBeTrue();
+        }
+
+        [Test]
         public void CheckForEmptyRevealsAllTilesAroundTile()
         {
             g = new GameController(3, 0);
